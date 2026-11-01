@@ -60,6 +60,22 @@ def toque(rid=None, texto=None):
     time.sleep(0.8)
 
 
+def fechar_teclado():
+    for _ in range(3):
+        if "mInputShown=true" not in adb("shell", "dumpsys", "input_method").stdout:
+            return
+        adb("shell", "input", "keyevent", "4")
+        time.sleep(1)
+
+
+def esperar_foco(trecho, segundos=30):
+    for _ in range(segundos):
+        if trecho in adb("shell", "dumpsys", "window").stdout.split("mCurrentFocus")[-1].split("\n")[0]:
+            return True
+        time.sleep(1)
+    return False
+
+
 # sem teclado virtual: evita sugestões/autocorreção no campo do nome
 for ime in adb("shell", "ime", "list", "-s").stdout.split():
     adb("shell", "ime", "disable", ime)
@@ -81,9 +97,7 @@ toque("editNome")
 adb("shell", "input", "text", "Joao")
 time.sleep(0.8)
 # fecha o teclado (se estiver aberto) para nao cobrir os botoes
-if "mInputShown=true" in adb("shell", "dumpsys", "input_method").stdout:
-    adb("shell", "input", "keyevent", "4")
-    time.sleep(1)
+fechar_teclado()
 toque("checkBacon")
 toque("checkQueijo")
 toque("btnMais")
@@ -97,12 +111,15 @@ shot("dbg-seletor")
 toque(texto="E-mail (simulado)")
 if achar(texto="Just once"):
     toque(texto="Just once")
-time.sleep(3)
+print("e-mail em foco:", esperar_foco("mailstub"))
+time.sleep(2)
 shot("3-3")
 
 # volta ao app e mostra o resumo do pedido
 adb("shell", "input", "keyevent", "4")
 time.sleep(2)
+esperar_foco("hamburgueriaz")
+fechar_teclado()
 resumo = achar("txtResumo")
 print("resumo na tela:", None if resumo is None else resumo.get("text"))
 rolar()
