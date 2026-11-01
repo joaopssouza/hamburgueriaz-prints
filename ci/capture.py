@@ -80,6 +80,10 @@ img.crop((0, 0, img.width, int(img.height * 0.30))).save(os.path.join(OUT, "2-6.
 toque("editNome")
 adb("shell", "input", "text", "Joao")
 time.sleep(0.8)
+# fecha o teclado (se estiver aberto) para nao cobrir os botoes
+if "mInputShown=true" in adb("shell", "dumpsys", "input_method").stdout:
+    adb("shell", "input", "keyevent", "4")
+    time.sleep(1)
 toque("checkBacon")
 toque("checkQueijo")
 toque("btnMais")
