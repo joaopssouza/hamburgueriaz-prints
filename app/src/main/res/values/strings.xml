@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">HamburgueriaZ</string>
+    <string name="faca_seu_pedido">Faça seu pedido</string>
+    <string name="hint_nome">Nome do cliente</string>
+    <string name="adicionais">Adicionais</string>
+    <string name="bacon">Bacon (+ R$ 2,00)</string>
+    <string name="queijo">Queijo (+ R$ 2,00)</string>
+    <string name="onion_rings">Onion Rings (+ R$ 3,00)</string>
+    <string name="quantidade">Quantidade</string>
+    <string name="mais">+</string>
+    <string name="menos">-</string>
+    <string name="enviar_pedido">Enviar pedido</string>
+    <string name="resumo_pedido">Resumo do pedido</string>
+    <string name="logo_desc">Logo da HamburgueriaZ</string>
+</resources>

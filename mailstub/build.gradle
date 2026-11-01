@@ -1,0 +1,23 @@
+// Aplicativo de e-mail SIMULADO, usado apenas na automação para capturar a tela
+// que o Intent ACTION_SENDTO abre (o emulador de CI não tem Gmail logado).
+plugins {
+    id 'com.android.application'
+}
+
+android {
+    namespace 'com.example.mailstub'
+    compileSdk 34
+
+    defaultConfig {
+        applicationId "com.example.mailstub"
+        minSdk 23
+        targetSdk 34
+        versionCode 1
+        versionName "1.0"
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+}

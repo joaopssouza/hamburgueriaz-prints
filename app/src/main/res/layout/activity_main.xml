@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <ImageView
+            android:id="@+id/imgLogo"
+            android:layout_width="match_parent"
+            android:layout_height="140dp"
+            android:contentDescription="@string/logo_desc"
+            android:scaleType="centerCrop"
+            android:src="@drawable/logo_hamburgueriaz" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <TextView
+                style="@style/EstiloTexto"
+                android:text="@string/faca_seu_pedido" />
+
+            <EditText
+                android:id="@+id/editNome"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/hint_nome"
+                android:inputType="textPersonName" />
+
+            <TextView
+                style="@style/EstiloTexto"
+                android:text="@string/adicionais" />
+
+            <CheckBox
+                android:id="@+id/checkBacon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/bacon" />
+
+            <CheckBox
+                android:id="@+id/checkQueijo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/queijo" />
+
+            <CheckBox
+                android:id="@+id/checkOnion"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/onion_rings" />
+
+            <TextView
+                style="@style/EstiloTexto"
+                android:text="@string/quantidade" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/btnMenos"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:onClick="subtrair"
+                    android:text="@string/menos" />
+
+                <TextView
+                    android:id="@+id/txtQuantidade"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingStart="24dp"
+                    android:paddingEnd="24dp"
+                    android:text="0"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+
+                <Button
+                    android:id="@+id/btnMais"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:onClick="somar"
+                    android:text="@string/mais" />
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/btnEnviar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:onClick="enviarPedido"
+                android:text="@string/enviar_pedido" />
+
+            <TextView
+                style="@style/EstiloTexto"
+                android:text="@string/resumo_pedido" />
+
+            <TextView
+                android:id="@+id/txtResumo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:id="@+id/txtTotal"
+                style="@style/EstiloTexto"
+                android:text="R$ 0,00" />
+        </LinearLayout>
+    </LinearLayout>
+</ScrollView>
