@@ -21,14 +21,24 @@ def shot(nome):
     print("capturado", nome)
 
 
-def centro(rid):
+def nos():
     adb("shell", "uiautomator", "dump", "/sdcard/ui.xml")
     adb("pull", "/sdcard/ui.xml", "ui.xml")
-    for n in ET.parse("ui.xml").iter("node"):
-        if n.get("resource-id") == "%s:id/%s" % (PKG, rid):
-            x1, y1, x2, y2 = [int(v) for v in n.get("bounds").replace("][", ",").strip("[]").split(",")]
-            return (x1 + x2) // 2, (y1 + y2) // 2
-    raise SystemExit("elemento nao encontrado: " + rid)
+    return list(ET.parse("ui.xml").iter("node"))
+
+
+def centro_no(n):
+    x1, y1, x2, y2 = [int(v) for v in n.get("bounds").replace("][", ",").strip("[]").split(",")]
+    return (x1 + x2) // 2, (y1 + y2) // 2
+
+
+def achar(rid=None, texto=None):
+    for n in nos():
+        if rid and n.get("resource-id") == "%s:id/%s" % (PKG, rid):
+            return n
+        if texto and n.get("text") == texto:
+            return n
+    return None
 
 
 def rolar():
@@ -37,15 +47,22 @@ def rolar():
     time.sleep(1)
 
 
-def toque(rid):
-    try:
-        x, y = centro(rid)
-    except SystemExit:
+def toque(rid=None, texto=None):
+    n = achar(rid, texto)
+    if n is None:
         rolar()
-        x, y = centro(rid)
+        n = achar(rid, texto)
+    if n is None:
+        shot("erro-" + (rid or "texto"))
+        raise SystemExit("elemento nao encontrado: %s %s" % (rid, texto))
+    x, y = centro_no(n)
     adb("shell", "input", "tap", str(x), str(y))
-    time.sleep(0.6)
+    time.sleep(0.8)
 
+
+# sem teclado virtual: evita sugestões/autocorreção no campo do nome
+for ime in adb("shell", "ime", "list", "-s").stdout.split():
+    adb("shell", "ime", "disable", ime)
 
 # instala os dois apps (o segundo é o e-mail simulado)
 adb("install", "-r", "app/build/outputs/apk/debug/app-debug.apk")
@@ -62,7 +79,6 @@ img.crop((0, 0, img.width, int(img.height * 0.30))).save(os.path.join(OUT, "2-6.
 # preenche o pedido: Joao, Bacon + Queijo, quantidade 2
 toque("editNome")
 adb("shell", "input", "text", "Joao")
-adb("shell", "input", "keyevent", "4")  # fecha o teclado
 time.sleep(0.8)
 toque("checkBacon")
 toque("checkQueijo")
@@ -70,13 +86,20 @@ toque("btnMais")
 toque("btnMais")
 shot("3-1")
 
-# envia o pedido: o Intent abre o app de e-mail
+# envia o pedido: o Intent abre o seletor e depois o app de e-mail
 toque("btnEnviar")
+time.sleep(2)
+shot("dbg-seletor")
+toque(texto="E-mail (simulado)")
+if achar(texto="Just once"):
+    toque(texto="Just once")
 time.sleep(3)
 shot("3-3")
 
-# volta e mostra o resumo do pedido
+# volta ao app e mostra o resumo do pedido
 adb("shell", "input", "keyevent", "4")
 time.sleep(2)
+resumo = achar("txtResumo")
+print("resumo na tela:", None if resumo is None else resumo.get("text"))
 rolar()
 shot("3-2")
