@@ -31,8 +31,18 @@ def centro(rid):
     raise SystemExit("elemento nao encontrado: " + rid)
 
 
+def rolar():
+    w, h = [int(v) for v in adb("shell", "wm", "size").stdout.split()[-1].split("x")]
+    adb("shell", "input", "swipe", str(w // 2), str(int(h * 0.75)), str(w // 2), str(int(h * 0.25)), "400")
+    time.sleep(1)
+
+
 def toque(rid):
-    x, y = centro(rid)
+    try:
+        x, y = centro(rid)
+    except SystemExit:
+        rolar()
+        x, y = centro(rid)
     adb("shell", "input", "tap", str(x), str(y))
     time.sleep(0.6)
 
@@ -68,6 +78,5 @@ shot("3-3")
 # volta e mostra o resumo do pedido
 adb("shell", "input", "keyevent", "4")
 time.sleep(2)
-adb("shell", "input", "swipe", "540", "1700", "540", "700", "400")
-time.sleep(1)
+rolar()
 shot("3-2")
