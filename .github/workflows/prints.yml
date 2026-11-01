@@ -3,6 +3,9 @@ name: Capturar prints
 on:
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
   prints:
     runs-on: ubuntu-latest
@@ -47,3 +50,12 @@ jobs:
           path: |
             prints/*.png
             app/build/outputs/apk/debug/app-debug.apk
+
+      - name: Commitar as capturas no repositorio
+        if: always()
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@users.noreply.github.com"
+          git add -f prints/*.png
+          git commit -m "Capturas geradas pela Action" || echo "nada para commitar"
+          git push origin HEAD:${{ github.ref_name }}
