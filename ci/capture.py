@@ -109,8 +109,17 @@ toque("btnEnviar")
 time.sleep(2)
 shot("dbg-seletor")
 toque(texto="E-mail (simulado)")
-if achar(texto="Just once"):
-    toque(texto="Just once")
+ns = nos()
+print("textos na tela:", [n.get("text") for n in ns if n.get("text")])
+botao = next((n for n in ns if n.get("resource-id") == "android:id/button_once"), None) \
+    or next((n for n in ns if (n.get("text") or "").lower() == "just once"), None)
+if botao is not None:
+    x, y = centro_no(botao)
+else:  # reserva: posicao do botao no seletor (aprox. 67% x 90% da tela)
+    w, h = [int(v) for v in adb("shell", "wm", "size").stdout.split()[-1].split("x")]
+    x, y = int(w * 0.67), int(h * 0.90)
+print("tocando em Just once:", x, y, "achado:", botao is not None)
+adb("shell", "input", "tap", str(x), str(y))
 print("e-mail em foco:", esperar_foco("mailstub"))
 time.sleep(2)
 shot("3-3")
